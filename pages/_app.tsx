@@ -44,8 +44,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" />
         <link rel="manifest" href="/favicons/manifest.json" />
 
-        <title>Privy x Base</title>
-        <meta name="description" content="Privy x Base" />
+        <title>Privy x Permissionless</title>
+        <meta name="description" content="Privy x Permissionless" />
       </Head>
       <PrivyProvider
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}

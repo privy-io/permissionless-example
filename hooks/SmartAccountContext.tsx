@@ -12,7 +12,6 @@ import { signerToSimpleSmartAccount } from "permissionless/accounts";
 import { createPimlicoPaymasterClient } from "permissionless/clients/pimlico";
 import { BASE_GOERLI_ENTRYPOINT_ADDRESS, SMART_ACCOUNT_FACTORY_ADDRESS } from "../lib/constants";
 
-
 /** Interface returned by custom `useSmartAccount` hook */
 interface SmartAccountInterface {
   /** Privy embedded wallet, used as a signer for the smart account */
@@ -85,7 +84,7 @@ export const SmartAccountProvider = ({
       const smartAccountClient = createSmartAccountClient({
         account: simpleSmartAccount,
         chain: baseGoerli, // Replace this with the chain for your app
-        transport: http(process.env.NEXT_PUBLIC_PIMLICO_PAYMASTER_URL),
+        transport: http(process.env.NEXT_PUBLIC_PIMLICO_BUNDLER_URL),
         sponsorUserOperation: pimlicoPaymaster.sponsorUserOperation // If your app uses a paymaster for gas sponsorship
       });
 
