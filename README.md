@@ -1,4 +1,4 @@
-# Privy x permissionless Starter
+# Privy x `permissionless` Starter
 
 ## Live Demo
 
