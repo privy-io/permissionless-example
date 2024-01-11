@@ -59,6 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             createOnLogin: "users-without-wallets",
             noPromptOnSignature: true,
           },
+          // @ts-ignore
           defaultChain: baseGoerli,
         }}
         onSuccess={() => router.push("/dashboard")}

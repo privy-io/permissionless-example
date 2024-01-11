@@ -38,6 +38,7 @@ export default function DashboardPage() {
     const toastId = toast.loading("Minting...");
 
     try {
+      // @ts-ignore
       const transactionHash = await smartAccountClient.sendTransaction({
         chain: baseGoerli,
         to: NFT_ADDRESS,
