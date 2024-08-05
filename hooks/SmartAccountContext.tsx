@@ -90,6 +90,7 @@ export const SmartAccountProvider = ({
       });
 
       const simpleSmartAccount = await signerToSimpleSmartAccount(
+        // @ts-ignore
         publicClient,
         {
           entryPoint: ENTRYPOINT_ADDRESS_V06,
