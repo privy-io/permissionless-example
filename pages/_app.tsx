@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { useRouter } from "next/router";
-import { baseGoerli } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { SmartAccountProvider } from "../hooks/SmartAccountContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             noPromptOnSignature: true,
           },
           // @ts-ignore
-          defaultChain: baseGoerli,
+          defaultChain: baseSepolia,
         }}
         onSuccess={() => router.push("/dashboard")}
       >

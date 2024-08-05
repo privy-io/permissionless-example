@@ -1,8 +1,7 @@
-export const SMART_ACCOUNT_FACTORY_ADDRESS = "0x9406Cc6185a346906296840746125a0E44976454";
-export const BASE_GOERLI_ENTRYPOINT_ADDRESS = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-// Sample NFT pulled from https://docs.base.org/guides/deploy-smart-contracts#verifying-the-smart-contract
-export const NFT_ADDRESS = "0x6527E5052de5521fE370AE5ec0aFCC6cD5a221de";
+// Base Sepolia Factory Address https://docs.alchemy.com/reference/factory-addresses
+export const SMART_ACCOUNT_FACTORY_ADDRESS =
+  "0x15Ba39375ee2Ab563E8873C8390be6f2E2F50232";
+// Sample NFT deployed to Base Sepolia, pulled from https://docs.base.org/guides/deploy-smart-contracts#verifying-the-smart-contract
+export const NFT_ADDRESS = "0x3331AfB9805ccF5d6cb1657a8deD0677884604A7";
 
-
-export const BASE_GOERLI_SCAN_URL = "https://goerli.basescan.org";
-
+export const BASE_SEPOLIA_SCAN_URL = "https://sepolia.basescan.org";

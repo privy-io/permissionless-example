@@ -24,7 +24,7 @@ git clone https://github.com/<your-github-handle>/permissionless-example
 npm i 
 ```
 
-3. Initialize your environment variables by copying the `.env.example` file to an `.env.local` file. Then, in `.env.local`, paste your **Privy App ID** from the [Privy console](https://console.privy.io) and your **Pimlico Bundler and Paymaster URLs** from the [Pimlico dashboard](https://dashboard.pimlico.io/). This app uses the **Base Goerli** testnet; you should make sure to apply the same settings to your Pimlico configuration in the dashboard. 
+3. Initialize your environment variables by copying the `.env.example` file to an `.env.local` file. Then, in `.env.local`, paste your **Privy App ID** from the [Privy console](https://console.privy.io) and your **Pimlico Bundler and Paymaster URLs** from the [Pimlico dashboard](https://dashboard.pimlico.io/). This app uses the **Base Sepolia** testnet; you should make sure to apply the same settings to your Pimlico configuration in the dashboard. 
 
 ```sh
 # In your terminal, create .env.local from .env.example
