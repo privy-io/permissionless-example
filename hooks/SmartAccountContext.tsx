@@ -106,6 +106,7 @@ export const SmartAccountProvider = ({
 
       const smartAccountClient = createSmartAccountClient({
         account: simpleSmartAccount,
+        entryPoint: ENTRYPOINT_ADDRESS_V06,
         chain: baseSepolia, // Replace this with the chain for your app
         bundlerTransport: http(process.env.NEXT_PUBLIC_PIMLICO_BUNDLER_URL),
         middleware: {
