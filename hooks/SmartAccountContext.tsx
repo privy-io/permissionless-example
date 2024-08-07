@@ -21,7 +21,7 @@ interface SmartAccountInterface {
   eoa: ConnectedWallet | undefined;
   /** Smart account client to send signature/transaction requests to the smart account */
   smartAccountClient:
-    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint>>
+    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint, string, Transport, Chain>>
     | Transport
     | any
     | SmartAccount<EntryPoint, string, Transport, Chain>
