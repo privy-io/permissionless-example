@@ -58,7 +58,7 @@ export const SmartAccountProvider = ({
   // States to store the smart account and its status
   const [eoa, setEoa] = useState<ConnectedWallet | undefined>();
   const [smartAccountClient, setSmartAccountClient] = useState<
-    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint>>
+    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint, string, Transport, Chain>>
     | Transport
     | any
     | SmartAccount<EntryPoint, string, Transport, Chain>
