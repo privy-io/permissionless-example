@@ -21,7 +21,7 @@ interface SmartAccountInterface {
   eoa: ConnectedWallet | undefined;
   /** Smart account client to send signature/transaction requests to the smart account */
   smartAccountClient:
-    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint>>
+    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint, string, Transport, Chain>>
     | Transport
     | any
     | SmartAccount<EntryPoint, string, Transport, Chain>
@@ -58,7 +58,7 @@ export const SmartAccountProvider = ({
   // States to store the smart account and its status
   const [eoa, setEoa] = useState<ConnectedWallet | undefined>();
   const [smartAccountClient, setSmartAccountClient] = useState<
-    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint>>
+    | SmartAccountClient<EntryPoint, Transport, Chain, SmartAccount<EntryPoint, string, Transport, Chain>>
     | Transport
     | any
     | SmartAccount<EntryPoint, string, Transport, Chain>
@@ -106,6 +106,7 @@ export const SmartAccountProvider = ({
 
       const smartAccountClient = createSmartAccountClient({
         account: simpleSmartAccount,
+        entryPoint: ENTRYPOINT_ADDRESS_V06,
         chain: baseSepolia, // Replace this with the chain for your app
         bundlerTransport: http(process.env.NEXT_PUBLIC_PIMLICO_BUNDLER_URL),
         middleware: {
