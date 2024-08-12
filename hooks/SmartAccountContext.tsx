@@ -54,8 +54,6 @@ export const SmartAccountProvider = ({
     (wallet) => wallet.walletClientType === "privy"
   );
 
-  console.log({wallets});
-
   // States to store the smart account and its status
   const [eoa, setEoa] = useState<ConnectedWallet | undefined>();
   const [smartAccountClient, setSmartAccountClient] = useState<
