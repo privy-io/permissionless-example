@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
-import { ConnectedWallet, useWallets } from "@privy-io/react-auth";
+import { ConnectedWallet, usePrivy, useWallets } from "@privy-io/react-auth";
 import { createPublicClient, createWalletClient, custom, http } from "viem";
 import { baseSepolia } from "viem/chains";
-import { Address, Chain, Transport } from "viem";
-import { SmartAccount } from "permissionless/accounts";
+import { Chain, Transport } from "viem";
+import { signerToSafeSmartAccount, SmartAccount } from "permissionless/accounts";
 import {
   walletClientToSmartAccountSigner,
   type SmartAccountClient,
   createSmartAccountClient,
-  ENTRYPOINT_ADDRESS_V06,
+  ENTRYPOINT_ADDRESS_V07,
 } from "permissionless";
 import { EntryPoint } from "permissionless/types";
-import { signerToSimpleSmartAccount } from "permissionless/accounts";
-import { createPimlicoPaymasterClient } from "permissionless/clients/pimlico";
-import { SMART_ACCOUNT_FACTORY_ADDRESS } from "../lib/constants";
+import { createPimlicoBundlerClient, createPimlicoPaymasterClient } from "permissionless/clients/pimlico";
 
 /** Interface returned by custom `useSmartAccount` hook */
 interface SmartAccountInterface {
@@ -50,10 +48,13 @@ export const SmartAccountProvider = ({
 }) => {
   // Get a list of all of the wallets (EOAs) the user has connected to your site
   const { wallets } = useWallets();
+  const {ready} = usePrivy();
   // Find the embedded wallet by finding the entry in the list with a `walletClientType` of 'privy'
   const embeddedWallet = wallets.find(
     (wallet) => wallet.walletClientType === "privy"
   );
+
+  console.log({wallets});
 
   // States to store the smart account and its status
   const [eoa, setEoa] = useState<ConnectedWallet | undefined>();
@@ -68,6 +69,10 @@ export const SmartAccountProvider = ({
     `0x${string}` | undefined
   >();
   const [smartAccountReady, setSmartAccountReady] = useState(false);
+
+  useEffect(() => {
+    if (!ready) return;
+  }, [ready, embeddedWallet]);
 
   useEffect(() => {
     // Creates a smart account given a Privy `ConnectedWallet` object representing
@@ -89,28 +94,34 @@ export const SmartAccountProvider = ({
         transport: http(),
       });
 
-      const simpleSmartAccount = await signerToSimpleSmartAccount(
+      const safeAccount = await signerToSafeSmartAccount(
         publicClient,
         {
-          entryPoint: ENTRYPOINT_ADDRESS_V06,
           signer: customSigner,
-          factoryAddress: SMART_ACCOUNT_FACTORY_ADDRESS! as Address,
+          safeVersion: '1.4.1',
+          entryPoint: ENTRYPOINT_ADDRESS_V07
         }
       );
 
       const pimlicoPaymaster = createPimlicoPaymasterClient({
         chain: baseSepolia,
         transport: http(process.env.NEXT_PUBLIC_PIMLICO_PAYMASTER_URL),
-        entryPoint: ENTRYPOINT_ADDRESS_V06,
+        entryPoint: ENTRYPOINT_ADDRESS_V07,
       });
 
+      const pimlicoBundler = createPimlicoBundlerClient({
+        transport: http(process.env.NEXT_PUBLIC_PIMLICO_PAYMASTER_URL),
+        entryPoint: ENTRYPOINT_ADDRESS_V07,
+      })
+
       const smartAccountClient = createSmartAccountClient({
-        account: simpleSmartAccount,
-        entryPoint: ENTRYPOINT_ADDRESS_V06,
+        account: safeAccount,
+        entryPoint: ENTRYPOINT_ADDRESS_V07,
         chain: baseSepolia, // Replace this with the chain for your app
         bundlerTransport: http(process.env.NEXT_PUBLIC_PIMLICO_BUNDLER_URL),
         middleware: {
-          sponsorUserOperation: pimlicoPaymaster.sponsorUserOperation, // If your app uses a paymaster for gas sponsorship
+          sponsorUserOperation: pimlicoPaymaster.sponsorUserOperation, 
+          gasPrice: async () => (await pimlicoBundler.getUserOperationGasPrice()).fast, 
         },
       });
 

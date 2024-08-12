@@ -2,15 +2,12 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { PrivyProvider } from "@privy-io/react-auth";
-import { useRouter } from "next/router";
 import { baseSepolia } from "viem/chains";
 import { SmartAccountProvider } from "../hooks/SmartAccountContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-
   return (
     <>
       <Head>
@@ -49,6 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <PrivyProvider
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
+
         config={{
           loginMethods: ["email", "google"],
           appearance: {
@@ -62,7 +60,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           // @ts-ignore
           defaultChain: baseSepolia,
         }}
-        onSuccess={() => router.push("/dashboard")}
       >
         <SmartAccountProvider>
           <ToastContainer position="top-right" />
