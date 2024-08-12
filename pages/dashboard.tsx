@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { usePrivy } from "@privy-io/react-auth";
+import { useLinkWithSiwe, usePrivy } from "@privy-io/react-auth";
 import Head from "next/head";
 import { useSmartAccount } from "../hooks/SmartAccountContext";
 import { BASE_SEPOLIA_SCAN_URL, NFT_ADDRESS } from "../lib/constants";
@@ -13,6 +13,7 @@ import { baseSepolia } from "viem/chains";
 export default function DashboardPage() {
   const router = useRouter();
   const { ready, authenticated, user, logout } = usePrivy();
+  const {generateSiweMessage, linkWithSiwe} = useLinkWithSiwe();
   const { smartAccountAddress, smartAccountClient, eoa } = useSmartAccount();
 
   // If the user is not authenticated, redirect them back to the landing page
@@ -79,6 +80,27 @@ export default function DashboardPage() {
     setIsMinting(false);
   };
 
+  const onLink = async () => {
+      // The link button is disabled if either of these are undefined
+      if (!smartAccountClient || !smartAccountAddress) return;
+      const chainId = `eip155:${baseSepolia.id}`;
+
+      const message = await generateSiweMessage({
+        address: smartAccountAddress,
+        chainId
+      });
+
+      const signature = await smartAccountClient.signMessage({message});
+
+      await linkWithSiwe({
+        signature,
+        message,
+        chainId,
+        walletClientType: 'privy_smart_account',
+        connectorType: 'safe'
+      });
+  }
+
   return (
     <>
       <Head>
@@ -107,6 +129,13 @@ export default function DashboardPage() {
                 disabled={isLoading || isMinting}
               >
                 Mint NFT
+              </button>
+              <button
+                onClick={onLink}
+                className="text-sm bg-violet-600 hover:bg-violet-700 disabled:bg-violet-400 py-2 px-4 rounded-md text-white"
+                disabled={isLoading}
+              >
+                Link smart account to user
               </button>
             </div>
             <p className="mt-6 font-bold uppercase text-sm text-gray-600">
