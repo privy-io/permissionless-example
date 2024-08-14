@@ -3,9 +3,12 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { baseSepolia } from "viem/chains";
-import { SmartAccountProvider } from "../hooks/SmartAccountContext";
+import { SmartAccountProvider } from "../sdk";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+const chain = baseSepolia;
+const smartAccountType = 'safe';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -46,7 +49,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <PrivyProvider
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
-
         config={{
           loginMethods: ["email", "google"],
           appearance: {
@@ -57,11 +59,10 @@ function MyApp({ Component, pageProps }: AppProps) {
             createOnLogin: "users-without-wallets",
             noPromptOnSignature: true,
           },
-          // @ts-ignore
-          defaultChain: baseSepolia,
+          defaultChain: chain,
         }}
       >
-        <SmartAccountProvider>
+        <SmartAccountProvider chain={chain} smartAccountType={smartAccountType}>
           <ToastContainer position="top-right" />
           <Component {...pageProps} />
         </SmartAccountProvider>

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useLinkWithSiwe, usePrivy } from "@privy-io/react-auth";
 import Head from "next/head";
-import { useSmartAccount } from "../hooks/SmartAccountContext";
+import { useSmartAccount } from "../sdk";
 import { BASE_SEPOLIA_SCAN_URL, NFT_ADDRESS } from "../lib/constants";
 import { encodeFunctionData } from "viem";
 import ABI from "../lib/nftABI.json";

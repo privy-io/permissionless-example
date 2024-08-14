@@ -1,0 +1,1 @@
+export {SmartAccountProvider, useSmartAccount} from './SmartAccountContext';
