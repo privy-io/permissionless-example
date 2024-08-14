@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { ConnectedWallet, usePrivy, useWallets, WalletWithMetadata } from "@privy-io/react-auth";
+import { ConnectedWallet, useWallets } from "@privy-io/react-auth";
 import { Chain, Transport } from "viem";
 import { SmartAccount } from "permissionless/accounts";
 import {
@@ -46,9 +46,9 @@ export const SmartAccountProvider = ({
   smartAccountType: SmartAccountType;
 }) => {
   const {wallets} = useWallets();
-  const {user} = usePrivy();
   const eoa = wallets.find((wallet) => wallet.walletClientType === "privy");
-  const linkedSmartAccount = user?.linkedAccounts.find((account): account is WalletWithMetadata => (account.type === 'wallet' && account.walletClientType === 'privy_smart_account'));
+  // const {user} = usePrivy();
+  // const linkedSmartAccount = user?.linkedAccounts.find((account): account is WalletWithMetadata => (account.type === 'wallet' && account.walletClientType === 'privy_smart_account'));
 
   // States to store the smart account and its status
   const [smartAccountClient, setSmartAccountClient] = useState<
