@@ -48,12 +48,11 @@ export const signerToSmartAccount = async (signer: SmartAccountSigner<"custom", 
                 signer: signer,
                 index: 0n,
             });
-
             return createSmartAccountClient({
                 account: kernelAccount,
                 entryPoint: entrypoint,
                 chain: chain,
-                bundlerTransport: http("https://api.pimlico.io/v2/sepolia/rpc?apikey=API_KEY"),
+                bundlerTransport: http(process.env.NEXT_PUBLIC_PIMLICO_BUNDLER_URL),
                 middleware: {
                     sponsorUserOperation: paymaster.sponsorUserOperation, // optional
                     gasPrice: async () => (await bundler.getUserOperationGasPrice()).fast, // use pimlico bundler to get gas prices
@@ -67,12 +66,11 @@ export const signerToSmartAccount = async (signer: SmartAccountSigner<"custom", 
                 entryPoint: entrypoint,
                 lightAccountVersion: "1.1.0",
             });
-
             return createSmartAccountClient({
                 account: lightAccount,
                 entryPoint: entrypoint,
                 chain: chain,
-                bundlerTransport: http("https://api.pimlico.io/v2/sepolia/rpc?apikey=API_KEY"),
+                bundlerTransport: http(process.env.NEXT_PUBLIC_PIMLICO_BUNDLER_URL),
                 middleware: {
                     sponsorUserOperation: paymaster.sponsorUserOperation, 
                     gasPrice: async () => (await bundler.getUserOperationGasPrice()).fast, 
@@ -86,9 +84,8 @@ export const signerToSmartAccount = async (signer: SmartAccountSigner<"custom", 
                   safeVersion: '1.4.1',
                   entryPoint: entrypoint
                 }
-              );
-        
-              return createSmartAccountClient({
+            );
+            return createSmartAccountClient({
                 account: safeAccount,
                 entryPoint: entrypoint,
                 chain: chain, 
@@ -97,7 +94,7 @@ export const signerToSmartAccount = async (signer: SmartAccountSigner<"custom", 
                   sponsorUserOperation: paymaster.sponsorUserOperation, 
                   gasPrice: async () => (await bundler.getUserOperationGasPrice()).fast, 
                 },
-              });
+            });
         default:
             throw new Error('Invalid smart account type.');
     }

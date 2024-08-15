@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { ConnectedWallet, useWallets } from "@privy-io/react-auth";
+import React, { useState, useEffect, useContext, useCallback } from "react";
+import { ConnectedWallet, useLinkWithSiwe, usePrivy, useWallets, WalletWithMetadata } from "@privy-io/react-auth";
 import { Chain, Transport } from "viem";
 import { SmartAccount } from "permissionless/accounts";
 import {
@@ -47,8 +47,9 @@ export const SmartAccountProvider = ({
 }) => {
   const {wallets} = useWallets();
   const eoa = wallets.find((wallet) => wallet.walletClientType === "privy");
-  // const {user} = usePrivy();
-  // const linkedSmartAccount = user?.linkedAccounts.find((account): account is WalletWithMetadata => (account.type === 'wallet' && account.walletClientType === 'privy_smart_account'));
+  const {user} = usePrivy();
+  const {generateSiweMessage, linkWithSiwe} = useLinkWithSiwe();
+  const linkedSmartAccount = user?.linkedAccounts.find((account): account is WalletWithMetadata => (account.type === 'wallet' && account.walletClientType === 'privy_smart_account'));
 
   // States to store the smart account and its status
   const [smartAccountClient, setSmartAccountClient] = useState<
@@ -63,6 +64,16 @@ export const SmartAccountProvider = ({
   >();
   const [smartAccountReady, setSmartAccountReady] = useState(false);
 
+  const linkSmartAccount = useCallback(async () => {
+    if (!smartAccountClient) return;
+    const chainId = `eip155:${chain.id}`
+    const message = await generateSiweMessage({
+      address: smartAccountClient.account.address, 
+      chainId
+    })
+    const signature = await smartAccountClient.signMessage({message});
+    await linkWithSiwe({signature, message, chainId});
+  }, [smartAccountClient, chain]);
 
   useEffect(() => {
     const createSmartWallet = async (eoa: ConnectedWallet) => {
@@ -78,6 +89,14 @@ export const SmartAccountProvider = ({
 
     if (eoa) createSmartWallet(eoa);
   }, [eoa?.address]);
+
+  useEffect(() => {
+    if (!smartAccountReady) return;
+    // If smart account is already linked, do not link it again
+    if (linkedSmartAccount?.address === smartAccountAddress) return;
+    // Otherwise link the smart account
+    linkSmartAccount();
+  }, [smartAccountAddress, smartAccountReady, linkedSmartAccount?.address]);
 
   return (
     <SmartAccountContext.Provider
