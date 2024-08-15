@@ -72,7 +72,7 @@ export const SmartAccountProvider = ({
       chainId
     })
     const signature = await smartAccountClient.signMessage({message});
-    await linkWithSiwe({signature, message, chainId});
+    await linkWithSiwe({signature, message, chainId, walletClientType: 'privy_smart_account', connectorType: smartAccountType});
   }, [smartAccountClient, chain]);
 
   useEffect(() => {
