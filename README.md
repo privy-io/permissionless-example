@@ -1,5 +1,7 @@
 # Privy x `permissionless` Starter
 
+> **This repository is archived.** For up-to-date examples, please visit [github.com/privy-io/examples](https://github.com/privy-io/examples).
+
 ## Live Demo
 
 [https://permissionless-example.privy.io/](https://permissionless-example.privy.io/)
